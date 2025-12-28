@@ -16,19 +16,19 @@ export default class DB {
             }
 
             this.async(() => {
-                if(!data.id) {
+                if(!data.id) { // ustawia automatycznie id 
                     data.id = this._rows.reduce((acc, item) => {
                         return acc <= item.id ? item.id + 1 : acc;
                     }, 1);
                 }
 
-                this._rows.push(data);
+                this._rows.push(data); // dodaje rekord
                 resolve(data)
             }); 
         });
     }
 
-    select(id) {
+    select(id) { // 1 rekord po id
         return new Promise((resolve, reject) => {
             this.async(() => {
                 const [row = null] = this._rows.filter(item => item.id === id);
@@ -41,7 +41,7 @@ export default class DB {
         });
     }
 
-    remove(id) {
+    remove(id) { // usuwa
         return new Promise((resolve, reject) => {
             this.async(() => {
                 const lengthBeforeFilter = this._rows.length;
@@ -57,14 +57,14 @@ export default class DB {
         });
     }
 
-    update(data) {
+    update(data) { // aktualizacja po id
         return new Promise((resolve, reject) => {
-            if(!data.id) {
+            if(!data.id) { // id jest wymagane
                 this.async(reject, 'ID have to be set!');
             } else {
                 this.async(() => {
                     let updated = null;
-                    this._rows = this._rows.map(item => {
+                    this._rows = this._rows.map(item => { // map zmiana po id
                         if(item.id === data.id) {
                             updated = data
                             return updated;
@@ -74,7 +74,7 @@ export default class DB {
                     });
 
                     if(updated) {
-                        resolve(updated);
+                        resolve(updated); // 
                     } else {
                         reject('ID not found!');   
                     }
@@ -93,7 +93,7 @@ export default class DB {
         })
     }
 
-    getRows() {
+    getRows() { // zwraca wszystkie rekordy
         return new Promise(resolve => {
             this.async(() => {
                 resolve(this._rows);
@@ -101,7 +101,7 @@ export default class DB {
         })
     }
 
-    async(callback, ...params) {
+    async(callback, ...params) { // "tylko udaje kod asynchroniczny"
         setTimeout(() => {
             callback(...params);
         }, Math.random() * 100);

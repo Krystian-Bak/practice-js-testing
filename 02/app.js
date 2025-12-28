@@ -1,6 +1,23 @@
 document.addEventListener('DOMContentLoaded', init);
 
+const alertContainer = document.querySelector('.alert')
+const alertMessage = document.querySelector('.alert__message')
+
+
+alertContainer.addEventListener('click', function(e){
+        if(e.target === alertContainer){
+            alertContainer.classList.add('alert--hidden')
+        }
+    })
+
+function showAlert(message){
+    alertMessage.textContent = message
+    alertContainer.classList.remove('alert--hidden')
+}
+
+
 function init() {
+
     const clickEl = document.querySelector('.error--click');
     const enterEl = document.querySelector('.error--enter');
 
@@ -22,7 +39,15 @@ function setRandomPosition(element, error = null) {
 }
 
 function initEventWithError(element, eventName, error) {
-    element.addEventListener(eventName, function() {
-        setRandomPosition(this, error);
+    element.addEventListener(eventName, () => {
+        try{
+            setRandomPosition(element, error)
+        } catch(err){
+            showAlert("Error: " + err.message)
+        }
     })
 }
+
+
+
+
