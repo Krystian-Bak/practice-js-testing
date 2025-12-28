@@ -1,4 +1,4 @@
-// ./DC.test.js
+// ./DC.it.js
 
 import DB from './DB';
 
@@ -31,7 +31,7 @@ describe('DB class', () => {
         dataBase = new DB()
     })
 
-    test('Add rekord insert and auto ID', async() => {
+    it('Add rekord insert and auto ID', async() => {
 
         const data = { name: 'Adam' }
         const result = await dataBase.insert(data)
@@ -47,7 +47,7 @@ describe('DB class', () => {
 
     // S.2. duplicate id
 
-    test('Duplicate id', async() =>{
+    it('Duplicate id', async() =>{
 
         await dataBase.insert({ id: 1, name: 'Adam' })
 
@@ -58,7 +58,7 @@ describe('DB class', () => {
 
     // S.3. non-number id
 
-    test('Non-number id', async() => {
+    it('Non-number id', async() => {
         
         await expect(dataBase.insert({ id: 'wasd', name: 'Adam'}))
             .rejects.toBe("ID can be only number!")
@@ -67,7 +67,7 @@ describe('DB class', () => {
 
     // S.4. select and update id record
 
-    test('Select and update id record', async() =>{
+    it('Select and update id record', async() =>{
         
         const added = await dataBase.insert({ name: 'Adam'})
         const newUpdate = await dataBase.select(added.id)
@@ -77,13 +77,13 @@ describe('DB class', () => {
 
     // S.5. when not found id
 
-    test('Not found id', async() => {
+    it('Not found id', async() => {
         await expect(dataBase.select(99999)).rejects.toBe("ID not found")
     })
 
     // S.5.1 update modiufies an existing record
 
-    test('Update modiufies an existing record', async() =>{
+    it('Update modiufies an existing record', async() =>{
 
         const added = await dataBase.insert({ name: 'Jan'})
         const newUpdate = { id: added.id, name: 'Janusz'}
@@ -97,27 +97,27 @@ describe('DB class', () => {
 
     // S.5.2 update rejects if id not set
 
-    test('Update reject if id not set', async() =>{
+    it('Update reject if id not set', async() =>{
         await expect(dataBase.update({ name: 'Piotr'}))
         .rejects.toBe('ID have to be set!')
     })
 
     // S.5.3 update rejects if id not found
 
-    test('Update rejects if id not found', async() =>{
+    it('Update rejects if id not found', async() =>{
         await expect(dataBase.update({ id: 123, name: 'Piort'}))
         .rejects.toBe('ID not found!')
     })
 
     // S.5.4 remove rejects if item doesn't exist
 
-    test('Remove rejects if item doesnt exist', async() =>{
+    it('Remove rejects if item doesnt exist', async() =>{
         await expect(dataBase.remove(99999)).rejects.toBe('Item not exist!')
     })
 
     // S.6. truncate clears all records
 
-    test('Truncate clears all records', async() =>{
+    it('Truncate clears all records', async() =>{
         
         await dataBase.insert({ name: 'Krystian'})
         await dataBase.insert({ name: 'Kamila'})
@@ -131,10 +131,9 @@ describe('DB class', () => {
         expect(allRows.length).toBe(0)
     })
 
-
     // S.7. getRows return all current records
 
-    test('GetRows return all current records', async() => {
+    it('GetRows return all current records', async() => {
         const piterName = await dataBase.insert({ name: 'Piotr'})
         const adamName = await dataBase.insert({ name: 'Adam'})
 
